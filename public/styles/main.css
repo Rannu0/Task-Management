@@ -1,0 +1,75 @@
+/* ------------------------------- Header ------------------------------- */
+
+.icon{
+  height: 40px;
+  width: 40px;
+  filter: invert(100%); 
+}
+
+#website-icon{
+  height: 45px;
+  width: 45px;
+}
+
+
+/* ------------------------------- Body ------------------------------- */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.task-text {
+  text-decoration: none; 
+}
+
+.form-check-input:checked + .task-text {
+  text-decoration: line-through; 
+}
+
+.weatherwidget-io{
+  border-radius: 30px;
+}
+.giphy-embed{
+  border-radius: 30px;
+}
+
+.quote{
+  font-size: 20px;
+  font-family: 'Libre Baskerville', serif;
+  font-family: 'Mooli', sans-serif;
+  color: #6c584c;
+  padding-top: 20px;
+
+}
+
+
+/* Footer */
+.footer-part {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0px;
+}
+
+.part1{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.list-title{
+  padding-left: 15%;
+  font-family: 'Libre Baskerville', serif;
+  font-family: 'Mooli', sans-serif;
+}
+
+.date{
+  font-family: 'Libre Baskerville', serif;
+  font-family: 'Mooli', sans-serif;
+}
+
+.nav-link{
+  font-family: 'Libre Baskerville', serif;
+  font-family: 'Mooli', sans-serif;
+}

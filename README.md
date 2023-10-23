@@ -1,6 +1,6 @@
 # Task Manager
 
-Task Manager Plus is a versatile web-based task management application that not only helps you organize your daily tasks but also enhances your overall productivity with the addition of weather updates, a music player, and motivational memes and quotes. 
+Task Manager is a versatile web-based task management web application that not only helps you organize your daily tasks but also enhances your overall productivity with the addition of weather updates, a music player, and motivational memes and quotes. 
 
 ## Key Features
 

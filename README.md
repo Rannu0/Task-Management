@@ -19,3 +19,17 @@ Task Manager is a versatile web-based task management web application that not o
 - **Music Player**: Enhance your productivity by playing your favourite music through the integrated player while working on tasks.
 
 - **Motivational Memes and Quotes**: Discover inspiration on each page (academic, career, lifestyle) to stay motivated and on track.
+
+## Installation
+```bash
+$ git clone https://github.com/yourusername/your-project.git
+$ cd your-project
+$ npm install
+```
+
+## Usage
+
+```bash
+$ node app.js
+# Open a web browser and go to http://localhost:3000
+```

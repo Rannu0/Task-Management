@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBCheckbox,
   MDBIcon,
@@ -9,6 +9,12 @@ import {
 
 function TaskList(props) {
   const tasks = props.tasks;
+  const [isChecked, setIsChecked] = useState(false);
+
+  function HandleClick() {
+    setIsChecked(!isChecked);
+    console.log("checkbox got clicked");
+  }
 
   function createTask(task, index) {
     return (
@@ -22,8 +28,11 @@ function TaskList(props) {
             value=""
             id={`flexCheckChecked-${index}`}
             className="me-3"
+            onClick={HandleClick}
           />
+
           {task}
+          
         </div>
         <MDBTooltip tag="a" wrapperProps={{ href: "#!" }} title="Remove item">
           <MDBIcon fas icon="times" color="primary" />
@@ -32,11 +41,12 @@ function TaskList(props) {
     );
   }
 
-  function crossOver(task, index){
-
-  }
-
-  return <MDBListGroup className="mb-0"> {tasks.map((task, index) => createTask(task, index))}</MDBListGroup>;
+  return (
+    <MDBListGroup className="mb-0">
+      {" "}
+      {tasks.map((task, index) => createTask(task, index))}
+    </MDBListGroup>
+  );
 }
 
 export default TaskList;

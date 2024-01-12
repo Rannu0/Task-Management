@@ -18,6 +18,10 @@ import TaskList from "./TaskList";
 
 function Checklist() {
     const [tasks, setTasks] = useState(["first", "second", "third", "fourth", "fifth"]);
+    const addTask = (newTask) => {
+        setTasks([...tasks, newTask]);
+      };
+    console.log(tasks)
  
   return (
     <div className="col-md-7">
@@ -30,7 +34,7 @@ function Checklist() {
                   <MDBCardBody className="p-5">
                     <h6 className="checklist-title mb-3">Todo List</h6>
 
-                    <ChecklistForm />
+                    <ChecklistForm addTask={addTask}/>
                     <TaskList tasks = {tasks} />
 
 

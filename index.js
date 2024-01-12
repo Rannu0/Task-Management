@@ -1,12 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import path from "path";
+import cors from "cors";
 
 //------------------------------- Set up ------------------------------------
 
 // Express.js set up
 const app = express();
 const port = 3000;
+app.use(cors());
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -17,6 +20,26 @@ const itemSchema = new mongoose.Schema ({
 });
 const Item = mongoose.model('Item', itemSchema);
 
+//------------------------------- TEST -------------------------
+app.get('/test', (req, res) => {
+    res.send("Connected to express");
+});
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //------------------------------- Get a real time date ------------------------
 function getCurrentDate() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -25,6 +48,8 @@ function getCurrentDate() {
   }
   
 const formattedDate = getCurrentDate();
+
+
 
 //------------------------------- Academic Page (main) -------------------------
 app.get("/", (req, res) => {
@@ -133,4 +158,4 @@ app.post("/:page/submit", (req, res) =>{
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
-
+  

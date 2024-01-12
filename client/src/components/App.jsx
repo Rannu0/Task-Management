@@ -20,7 +20,7 @@ const App = () => {
   <div>
     <Header />
     
-    <div class="row align-items-md-stretch">
+    <div className="row align-items-md-stretch">
       <Checklist />
       <Weather />
     </div>

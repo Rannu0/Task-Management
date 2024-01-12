@@ -14,15 +14,18 @@ import {
   MDBTooltip,
 } from "mdb-react-ui-kit";
 
-function ChecklistForm() {
-    const [task, setTask] = useState("");
-    
-    function handleInputChange(event){
-        setTask(event.target.value);
-    }
-  function handleSubmit(){
-    console.log(task)
-    console.log("submit clicked")
+function ChecklistForm(props) {
+
+  const [task, setTask] = useState("");
+
+  function handleInputChange(event) {
+    setTask(event.target.value);
+  }
+  function handleSubmit() {
+    if (task.trim() !== '') {
+        props.addTask(task); // Call the addTask function from props to update the state in the parent component
+        setTask(''); // Reset the task input after submitting
+      }
   }
 
   return (

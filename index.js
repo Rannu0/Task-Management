@@ -28,18 +28,6 @@ app.get('/test', (req, res) => {
   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 //------------------------------- Get a real time date ------------------------
 function getCurrentDate() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };

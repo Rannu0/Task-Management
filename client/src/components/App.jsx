@@ -6,7 +6,6 @@ import RightPart from "./Right_part";
 import ArchiveList from "./archive_list/ArchiveList";
 
 const App = () => {
-
   const [data, setData] = useState("");
 
   const getData = async () => {
@@ -18,37 +17,53 @@ const App = () => {
   }, []);
 
   // store users' todo tasks and checked tasks
-  const [tasks, setTasks] = useState(["first", "second", "third", "fourth", "fifth"]);
-  const [archiveTasks, setArchivedTasks] = useState(["checked1","checked2","checked3"]);
+  const [tasks, setTasks] = useState([
+    "first",
+    "second",
+    "third",
+    "fourth",
+    "fifth",
+  ]);
+  const [archiveTasks, setArchivedTasks] = useState([
+    "checked1",
+    "checked2",
+    "checked3",
+  ]);
 
+  // add new task to the original tasks list
+  const addTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+  };
 
-    // add new task to the original tasks list
-    const addTask = (newTask) => {
-      
-      setTasks([...tasks, newTask]);
-    };
+  //delete checked task from the original tasks list
+  const deleteTask = (checkedTask) => {
+    const updatedTasks = tasks.filter((task) => task !== checkedTask);
+    setTasks(updatedTasks);
+  };
 
-    //delete checked task from the original tasks list and add to archive list
-    const deleteTask = (checkedTask) => {
-      //TODO: delete checkedTask from tasks.
-      const updatedTasks = tasks.filter((task) => task !== checkedTask);
-      setTasks(updatedTasks);
-      setArchivedTasks([...archiveTasks, checkedTask]);
-    }
+  const archiveTask = (archivedTask) => {
+    // Remove archived task from the original tasks list
+   deleteTask(archivedTask);
 
-    console.log(tasks)
+    // Add the archived task to the archive tasks list
+    setArchivedTasks([...archiveTasks, archivedTask]);
+  };
 
+  const unarchiveTask = (unarchiveTask) => {
+    addTask(unarchiveTask);
+    const updatedTasks = archiveTasks.filter((task) => task !== unarchiveTask);
+    setArchivedTasks(updatedTasks);
 
-    
+  }
+
+  console.log(tasks);
 
   return (
     <div>
-
       <Header />
       <div className="body-container row align-items-md-baseline">
-        <Checklist tasks = {tasks} addTask = {addTask} deleteTask={deleteTask}/>
-        <RightPart archiveTasks = {archiveTasks}/>
-
+        <Checklist tasks={tasks} addTask={addTask} deleteTask={deleteTask} archiveTask={archiveTask}/>
+        <RightPart archiveTasks={archiveTasks} unarchiveTask={unarchiveTask} />
       </div>
     </div>
   );

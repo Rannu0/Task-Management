@@ -4,13 +4,14 @@ import Weather from "./archive_list/Weather";
 
 function RightPart(props) {
   const archiveTasks = props.archiveTasks;
+  const unarchiveTask = props.unarchiveTask
   
 
   return (
     <div className="col-md-5">
       <Weather />
 
-      <ArchiveList archiveTasks={archiveTasks} />
+      <ArchiveList archiveTasks={archiveTasks} unarchiveTask = {unarchiveTask}/>
     </div>
   );
 }

@@ -18,10 +18,10 @@ import TaskList from "./TaskList";
 
 function Checklist(props) {
 
-    // get tasks from addTask from App.jsx
     const tasks = props.tasks;
     const addTask = props.addTask;
     const deleteTask = props.deleteTask;
+    const archiveTask = props.archiveTask;
  
   return (
     <div className="col-md-7">
@@ -35,7 +35,7 @@ function Checklist(props) {
                     <h6 className="checklist-title mb-3">Todo List</h6>
 
                     <ChecklistForm addTask={addTask}/>
-                    <TaskList tasks = {tasks} deleteTask = {deleteTask}/>
+                    <TaskList tasks = {tasks} deleteTask = {deleteTask} archiveTask = {archiveTask}/>
 
                   </MDBCardBody>
                 </MDBCard>

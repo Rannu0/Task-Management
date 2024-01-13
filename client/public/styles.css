@@ -50,6 +50,10 @@
   .strikethrough {
     text-decoration-line: line-through;
   }
+
+  #delete-icon{
+    color: #f5ba13;
+  }
   
 /* 
   footer {

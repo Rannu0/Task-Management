@@ -25,7 +25,7 @@ function Checklist(props) {
  
   return (
     <div className="col-md-7">
-      <div className="h-100 p-10 text-bg-dark rounded-3">
+      <div className="h-100 p-10 rounded-3">
         <section className="vh-100">
           <MDBContainer className="py-5 h-100">
             <MDBRow className="d-flex justify-content-center align-items-center">

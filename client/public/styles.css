@@ -5,13 +5,16 @@
   }
   html {
     font-family: "Montserrat", sans-serif;
+    
   }
   body {
     padding: 0 16px;
     background-color: #ffffff;
     background-image: url("https://www.transparenttextures.com/patterns/ag-square.png");
+    align-content: center;
+    
   }
-  
+
   header {
     background-color: #f5ba13;
     margin: auto -16px;
@@ -42,11 +45,13 @@
   
   #checklist-form{
     font-family: "McLaren", cursive;
-    
   }
 
+  .strikethrough {
+    text-decoration-line: line-through;
+  }
   
-
+/* 
   footer {
     position: absolute;
     text-align: center;
@@ -77,7 +82,7 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-  
+   */
 .icon {
     height: 70px;
     width: 70px;

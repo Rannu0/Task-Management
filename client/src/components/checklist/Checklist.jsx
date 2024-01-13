@@ -16,12 +16,12 @@ import {
 import ChecklistForm from "./ChecklistForm";
 import TaskList from "./TaskList";
 
-function Checklist() {
-    const [tasks, setTasks] = useState(["first", "second", "third", "fourth", "fifth"]);
-    const addTask = (newTask) => {
-        setTasks([...tasks, newTask]);
-      };
-    console.log(tasks)
+function Checklist(props) {
+
+    // get tasks from addTask from App.jsx
+    const tasks = props.tasks;
+    const addTask = props.addTask;
+    const deleteTask = props.deleteTask;
  
   return (
     <div className="col-md-7">
@@ -35,9 +35,7 @@ function Checklist() {
                     <h6 className="checklist-title mb-3">Todo List</h6>
 
                     <ChecklistForm addTask={addTask}/>
-                    <TaskList tasks = {tasks} />
-
-
+                    <TaskList tasks = {tasks} deleteTask = {deleteTask}/>
 
                   </MDBCardBody>
                 </MDBCard>

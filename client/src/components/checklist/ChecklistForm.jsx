@@ -38,8 +38,8 @@ function ChecklistForm(props) {
         placeholder="Add a new todo"
         value={task}
       />
-      <MDBBtn type="submit" size="lg" className="ms-2" onClick={handleSubmit}>
-        Add
+      <MDBBtn rounded color='warning'type="submit" size="lg" className="ms-2" onClick={handleSubmit}>
+      <MDBIcon fas icon="plus" />
       </MDBBtn>
     </div>
   );

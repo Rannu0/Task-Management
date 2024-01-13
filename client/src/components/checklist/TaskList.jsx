@@ -12,6 +12,7 @@ function TaskList(props) {
   const [tasks, setTasks] = useState(props.tasks);
   const [checkedTasks, setCheckedTasks] = useState({});
   const deleteTask = props.deleteTask;
+  const archiveTask = props.archiveTask;
 
   // Update local tasks state when props.tasks change
   useEffect(() => {
@@ -24,10 +25,14 @@ function TaskList(props) {
       return { ...prevCheckedTasks, [task]: !prevCheckedTasks[task] };
     });
   }
-
+  // function to handle delete button click
   function handleDelete(task) {
-    console.log("delete item");
     deleteTask(task);
+  }
+
+  // function to handle archive button click
+  function handleArchive(task) {
+    archiveTask(task);
   }
 
   function createTask(task, index) {
@@ -53,11 +58,29 @@ function TaskList(props) {
           {task}
         </div>
 
-        <MDBBtn type="submit" className="ms-2" color="white" rounded onClick={() => handleDelete(task)}>
-          <MDBIcon icon="trash-alt" id="delete-icon" />
-        </MDBBtn>
+        <div className="button-container">
+          {checkedTasks[task] && ( // Render the Archive button only if the task is checked
+            <MDBBtn
+              type="submit"
+              className="ms-2 archive-button"
+              color="white"
+              rounded
+              onClick={() => handleArchive(task)}
+            >
+              <MDBIcon icon="archive" id="archive-icon" />
+            </MDBBtn>
+          )}
 
-
+          <MDBBtn
+            type="submit"
+            className="ms-2 delete-button"
+            color="white"
+            rounded
+            onClick={() => handleDelete(task)}
+          >
+            <MDBIcon icon="trash-alt" id="delete-icon" />
+          </MDBBtn>
+        </div>
       </MDBListGroupItem>
     );
   }

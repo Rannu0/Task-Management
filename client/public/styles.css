@@ -54,6 +54,19 @@
   #delete-icon{
     color: #f5ba13;
   }
+
+  #archive-icon{
+    color:sienna;
+  }
+
+  .button-container{
+    display: flex;
+  }
+  
+  .archive-list{
+    display: flex;
+    justify-content: space-between
+  }
   
 /* 
   footer {

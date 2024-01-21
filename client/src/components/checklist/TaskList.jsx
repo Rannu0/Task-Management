@@ -31,7 +31,7 @@ function TaskList(props) {
   }
 
   // function to handle archive button click
-  function handleArchive(task) {
+  function handleArchive(task){
     archiveTask(task);
   }
 
@@ -59,28 +59,31 @@ function TaskList(props) {
         </div>
 
         <div className="button-container">
-          {checkedTasks[task] && ( // Render the Archive button only if the task is checked
-            <MDBBtn
-              type="submit"
-              className="ms-2 archive-button"
-              color="white"
-              rounded
-              onClick={() => handleArchive(task)}
-            >
-              <MDBIcon icon="archive" id="archive-icon" />
-            </MDBBtn>
-          )}
 
+        {checkedTasks[task] && ( // Render the Archive button only if the task is checked
           <MDBBtn
             type="submit"
-            className="ms-2 delete-button"
+            className="ms-2 archive-button"
             color="white"
-            rounded
-            onClick={() => handleDelete(task)}
+            rounded 
+            onClick={() => handleArchive(task)}
           >
-            <MDBIcon icon="trash-alt" id="delete-icon" />
+            <MDBIcon icon="archive" id="archive-icon" />
           </MDBBtn>
+        )}
+
+
+
+        <MDBBtn type="submit" className="ms-2 delete-button" color="white" rounded onClick={() => handleDelete(task)}>
+          <MDBIcon icon="trash-alt" id="delete-icon" />
+        </MDBBtn>
+
+        
+
+
         </div>
+
+
       </MDBListGroupItem>
     );
   }

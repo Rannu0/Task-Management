@@ -8,11 +8,7 @@ import ArchiveList from "./archive_list/ArchiveList";
 const App = () => {
   // store users' todo tasks and checked tasks
   const [tasks, setTasks] = useState([]);
-  const [archiveTasks, setArchivedTasks] = useState([
-    "checked1",
-    "checked2",
-    "checked3",
-  ]);
+  const [archiveTasks, setArchivedTasks] = useState([]);
 
   useEffect(() => {
     // Fetch tasks (both regular and archived)
@@ -87,7 +83,6 @@ const App = () => {
       });
   };
 
-  console.log(tasks);
 
   return (
     <div>

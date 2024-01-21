@@ -6,55 +6,86 @@ import RightPart from "./Right_part";
 import ArchiveList from "./archive_list/ArchiveList";
 
 const App = () => {
-  const [data, setData] = useState("");
-
-  const getData = async () => {
-    const response = await Axios.get("http://localhost:3000/test");
-    setData(response.data);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-
   // store users' todo tasks and checked tasks
-  const [tasks, setTasks] = useState([
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [archiveTasks, setArchivedTasks] = useState([
     "checked1",
     "checked2",
     "checked3",
   ]);
 
+  useEffect(() => {
+    // Fetch tasks (both regular and archived)
+    Axios.get("http://localhost:3000/")
+      .then((res) => {
+        const { taskCreated, archivedTasks } = res.data;
+        const taskNames = taskCreated.map((task) => task.name);
+        const archivedTaskNames = archivedTasks.map((task) => task.name);
+
+        setTasks(taskNames);
+        setArchivedTasks(archivedTaskNames);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+      });
+  }, []); // Empty dependency array ensures the effect runs once on component mount
+
   // add new task to the original tasks list
   const addTask = (newTask) => {
-    setTasks([...tasks, newTask]);
+    console.log("React: user submitted a new task: " + newTask);
+
+    // Make API request to send data back to the server
+    Axios.post("http://localhost:3000/submit", { task: newTask })
+      .then((res) => {
+        // If the server successfully processes the request, update the state
+        setTasks([...tasks, newTask]);
+      })
+      .catch((error) => {
+        console.error("Error adding task:", error);
+      });
   };
 
-  //delete checked task from the original tasks list
+  // Update deleteTask function
   const deleteTask = (checkedTask) => {
-    const updatedTasks = tasks.filter((task) => task !== checkedTask);
-    setTasks(updatedTasks);
+    // Make API request to delete task from the server
+    Axios.delete(`http://localhost:3000/delete/${checkedTask}`)
+      .then((res) => {
+        // If the server successfully processes the request, update the state
+        const updatedTasks = tasks.filter((task) => task !== checkedTask);
+        setTasks(updatedTasks);
+      })
+      .catch((error) => {
+        console.error("Error deleting task:", error);
+      });
   };
 
+  // Update archiveTask function
   const archiveTask = (archivedTask) => {
-    // Remove archived task from the original tasks list
-   deleteTask(archivedTask);
-
-    // Add the archived task to the archive tasks list
-    setArchivedTasks([...archiveTasks, archivedTask]);
+    // Make API request to archive task on the server
+    Axios.post("http://localhost:3000/archive", { task: archivedTask })
+      .then((res) => {
+        // If the server successfully processes the request, update the state
+        deleteTask(archivedTask); // Remove task from the main tasks list
+        setArchivedTasks([...archiveTasks, archivedTask]); // Add task to the archive tasks list
+      })
+      .catch((error) => {
+        console.error("Error archiving task:", error);
+      });
   };
 
+  // Update unarchiveTask function
   const unarchiveTask = (unarchiveTask) => {
-    addTask(unarchiveTask);
-    const updatedTasks = archiveTasks.filter((task) => task !== unarchiveTask);
-    setArchivedTasks(updatedTasks);
-
-  }
+    // Make API request to unarchive task on the server
+    Axios.post("http://localhost:3000/unarchive", { task: unarchiveTask })
+      .then((res) => {
+        // If the server successfully processes the request, update the state
+        setArchivedTasks(archiveTasks.filter((task) => task !== unarchiveTask)); // Remove task from the archive tasks list
+        setTasks([...tasks, unarchiveTask]); // Add task back to the regular tasks list
+      })
+      .catch((error) => {
+        console.error("Error unarchiving task:", error);
+      });
+  };
 
   console.log(tasks);
 
@@ -62,7 +93,12 @@ const App = () => {
     <div>
       <Header />
       <div className="body-container row align-items-md-baseline">
-        <Checklist tasks={tasks} addTask={addTask} deleteTask={deleteTask} archiveTask={archiveTask}/>
+        <Checklist
+          tasks={tasks}
+          addTask={addTask}
+          deleteTask={deleteTask}
+          archiveTask={archiveTask}
+        />
         <RightPart archiveTasks={archiveTasks} unarchiveTask={unarchiveTask} />
       </div>
     </div>

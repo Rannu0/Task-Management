@@ -9,141 +9,135 @@ import cors from "cors";
 // Express.js set up
 const app = express();
 const port = 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Database set up
-mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true });   
-const itemSchema = new mongoose.Schema ({
-    name: String,
+mongoose.connect("mongodb://localhost:27017/todolistDB", {
+  useNewUrlParser: true,
 });
-const Item = mongoose.model('Item', itemSchema);
-
-//------------------------------- TEST -------------------------
-app.get('/test', (req, res) => {
-    res.send("Connected to express");
+const itemSchema = new mongoose.Schema({
+  name: String,
 });
+const Item = mongoose.model("Item", itemSchema);
 
-  
-
+const archivedItemSchema = new mongoose.Schema({
+  name: String,
+});
+const ArchivedItem = mongoose.model("ArchivedItem", archivedItemSchema);
 
 //------------------------------- Get a real time date ------------------------
 function getCurrentDate() {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const currentDate = new Date().toLocaleDateString(undefined, options);
-    return currentDate;
-  }
-  
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const currentDate = new Date().toLocaleDateString(undefined, options);
+  return currentDate;
+}
+
 const formattedDate = getCurrentDate();
 
+//------------------------------- Routers -----------------------------------------------
 
+app.get("/", async (req, res) => {
+  try {
+    // Fetch both regular and archived tasks
+    const regularTasks = await Item.find({});
+    const archivedTasks = await ArchivedItem.find({});
 
-//------------------------------- Academic Page (main) -------------------------
-app.get("/", (req, res) => {
-    Item.find({}).then(function(foundItems){
-        res.render("index.ejs", {
-            taskCreated : foundItems,
-            date : formattedDate,
-        });
-      })
-      .catch(function(err){
-        console.log(err);
-      });   
-})
+    res.json({
+      taskCreated: regularTasks,
+      archivedTasks: archivedTasks,
+      date: formattedDate,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-app.post("/submit", (req, res) => {
+app.post("/submit", async (req, res) => {
+  try {
     // Receive the request from the user and trim whitespace
-    const taskName = req.body["Task"].trim(); 
+    const taskName = req.body.task.trim();
+
     // create task object
-    const task = Item({
-        name: taskName,
+    const task = new Item({
+      name: taskName,
     });
 
     // Check if the user's input is empty
-    // if empty, alert user
-    // otherwise, save the input to database
+    // if empty, send an error response
+    // otherwise, save the input to the database
     if (task.name.length === 0) {
-        res.render("index.ejs", {
-            alertMessage: "Please enter something.",
-            date : formattedDate,
-        });
+      res.status(400).json({ error: "Please enter something." });
     } else {
-        task.save();
-        res.redirect("/");
+      await task.save();
+      res.json({ success: true });
     }
-})
+  } catch (error) {
+    console.error("Error adding task:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
+// Add new route for deleting tasks
+app.delete("/delete/:taskName", async (req, res) => {
+  try {
+    const taskName = req.params.taskName;
 
-//------------------------------- Get router for Career and Lifestyle --------------------------------
-app.get("/:page", (req, res) =>{
-    const page = req.params.page;   // get url parameter (i.e. career, lifestyle)
-    const ejsName = page + ".ejs";  // create ejs file name corresponding to the parameter
+    // Use the appropriate model (Item) for your task schema
+    await Item.deleteOne({ name: taskName });
 
-    // If user is getting a page other than the main page 
-    // create corresponding collection and scheme
-    // render corresponding ejs file
-    if(page != "main.css"){
-        const Page = mongoose.model(page, itemSchema);
-        Page.find({}).then(function(foundItems){
-            res.render(ejsName, {
-                taskCreated : foundItems,
-                date : formattedDate,
-            });
-          })
-          .catch(function(err){
-            console.log(err);
-          }); 
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-    // user is requesting the main page, direct to main page
+app.post("/archive", async (req, res) => {
+  try {
+    const archivedTaskName = req.body.task.trim();
+
+    const archivedTask = new ArchivedItem({
+      name: archivedTaskName,
+    });
+
+    if (archivedTask.name.length === 0) {
+      res.status(400).json({ error: "Invalid archived task." });
     } else {
-        res.redirect("/");
+      await archivedTask.save();
+      res.json({ success: true });
     }
+  } catch (error) {
+    console.error("Error archiving task:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
-})
+// Add new route for unarchiving tasks
+app.post("/unarchive", async (req, res) => {
+  try {
+    const unarchivedTaskName = req.body.task.trim();
+    // Use the appropriate model (Item) for your task schema
+    const unarchivedTask = new Item({
+        name: unarchivedTaskName,
+      });
 
-//------------------------------- Post request for Career and Lifestyle page--------------------------------
-app.post("/:page/submit", (req, res) =>{
-    const page = req.params.page;
-    const collName = page + "s";
-    const ejsName = page + ".ejs";
-    const urlPath = "/" + page;
-
-    // trim task content 
-    const taskContent = req.body["Task"].trim();
+    // Use the appropriate model (ArchivedItem) for your archived task schema
+    await ArchivedItem.deleteOne({ name: unarchivedTaskName });
+    await unarchivedTask.save();
     
-    if(page != "main.css"){
-        const Page = mongoose.model(page, itemSchema);
-        const task = Page({
-            name: taskContent,
-        });
-        if (task.name.length === 0) {
-            res.render(ejsName, {
-                alertMessage: "Please enter something.",
-                date : formattedDate,
-            });
-        } else {
-            task.save();
-            res.redirect(urlPath);  // After saving the task, user is redirected.
-        }
-    // user is requesting the main page, direct to main page
-    } else {
-        Item.find({}).then(function(foundItems){
-            res.render("index.ejs", {
-                taskCreated : foundItems,
-                date : formattedDate,
-            });
-          })
-          .catch(function(err){
-            console.log(err);
-          });   
-        res.redirect("/");
-    }
 
-})
-
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error unarchiving task:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
-  
+  console.log(`Listening on port ${port}`);
+});
